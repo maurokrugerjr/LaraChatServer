@@ -13,14 +13,19 @@ class User extends Authenticatable implements JWTSubject
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    protected $table = 'usuarios';
+
     protected $fillable = [
-        'name',
+        'nome',
         'email',
-        'password',
+        'senha',
+        'avatar',
+        'status',
+        'ultimo_acesso',
     ];
 
     protected $hidden = [
-        'password',
+        'senha',
         'remember_token',
     ];
 
@@ -28,8 +33,19 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'ultimo_acesso'     => 'datetime',
+            'senha'             => 'hashed',
         ];
+    }
+
+    public function getAuthPassword(): string
+    {
+        return $this->senha;
+    }
+
+    public function getAuthPasswordName(): string
+    {
+        return 'senha';
     }
 
     public function getJWTIdentifier(): mixed
